@@ -9,7 +9,7 @@ const userCourse = require("./routes/Course")
 const database = require("./config/database")
 const cookieParser = require("cookie-parser")
 const cors = require("cors")
-const {cloudinarConnect, cloudinaryConnect} = require("./config/cloudinary")
+const {cloudinaryConnect} = require("./config/cloudinary")
 const fileUpload = require("express-fileupload")
 const dotenv = require("dotenv");
 
@@ -30,7 +30,7 @@ app.use(
 app.use(
     fileUpload({
         useTempFiles: true,
-        tempFileDir:"/temp"
+        tempFileDir:"/tmp/"
     })
 )
 

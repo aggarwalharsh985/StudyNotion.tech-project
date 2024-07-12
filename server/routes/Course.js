@@ -11,7 +11,7 @@ const {
     getCourseDetails,
     getFullCourseDetails,
     editCourse,
-    getInstructorCourses,
+    // getInstructorCourses,
     deleteCourse,
 } = require("../contorllers/Course")
 

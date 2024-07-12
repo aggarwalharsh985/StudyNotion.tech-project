@@ -27,7 +27,7 @@ export default function RenderSteps (){
         <>
             <div className="relative mb-2 flex w-full justify-center">
                 {steps.map((item) => (
-                    <>
+                    < React.Fragment key={item.id}>
                         <div
                             className="flex flex-col items-center"
                             key={item.id}
@@ -55,7 +55,7 @@ export default function RenderSteps (){
                                 ></div>
                             </>
                         )}
-                    </>
+                    </React.Fragment>
                 ))}
             </div>
             <div className="relative mb-16 flex w-full select-none justify-between">

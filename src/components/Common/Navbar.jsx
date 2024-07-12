@@ -13,24 +13,6 @@ import { useEffect } from "react";
 import { ACCOUNT_TYPE } from "../../utils/constants";
 import { AiOutlineMenu } from "react-icons/ai";
 
-// const subLinks = [
-//   {
-//     title: "Python",
-//     link: "/catalog/python",
-//   },
-//   {
-//     title: "javascript",
-//     link: "/catalog/javascript",
-//   },
-//   {
-//     title: "web-development",
-//     link: "/catalog/web-development",
-//   },
-//   {
-//     title: "Android Development",
-//     link: "/catalog/Android Development",
-//   },
-// ];
 function Navbar () {
     const {token} = useSelector((state) => state.auth);
     const {user} = useSelector((state) => state.profile);
@@ -45,7 +27,7 @@ function Navbar () {
           setLoading(true)
           try {
             const res = await apiconnector("GET", categories.CATEGORIES_API)
-            console.log("API Response:", res);
+            // console.log("API Response:", res);
             setSubLinks(res.data.data)
           } catch (error) {
             console.log("Could not fetch Categories.", error)
@@ -53,7 +35,8 @@ function Navbar () {
           setLoading(false)
         })()
       }, [])
-    console.log("sub links", subLinks?.courses)
+    // console.log("sub links", subLinks)
+    // console.log(subLinks?.length)
 
     const matchRoute = (route) => {
         return matchPath({path:route}, location.pathname)
@@ -91,10 +74,9 @@ function Navbar () {
                                                             <p className="text-center">Loading...</p>
                                                         ) : subLinks?.length ? (
                                                             <>
+                                                                
                                                                 {
-                                                                    subLinks?.filter(
-                                                                        (subLink) => subLink?.courses?.length > 0
-                                                                    )
+                                                                    subLinks
                                                                     ?.map((subLink,i) => (
                                                                         <Link 
                                                                             to={`/catalog/${subLink.name
@@ -106,6 +88,7 @@ function Navbar () {
                                                                             key={i}
                                                                         >
                                                                             <p>{subLink.name}</p>
+                                                                            {/* <p>hello</p> */}
                                                                         </Link>
                                                                     ))
                                                                 }
@@ -171,6 +154,7 @@ function Navbar () {
                     <AiOutlineMenu fontSize={24} fill="#AFB2BF" />
                 </button>
             </div>
+            
         </div>
     )
 }

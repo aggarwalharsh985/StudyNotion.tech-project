@@ -3,7 +3,7 @@ const User = require("../models/User");
 const Category = require("../models/Category");
 const {uploadImageToCloudinary} = require("../utils/imageUploader");
 
-// create course hadler function 
+// create course hadler function
 exports.createCourse = async (req,res) => {
     try {
         // fetch data
@@ -20,12 +20,23 @@ exports.createCourse = async (req,res) => {
           } = req.body
 
         // get thumbnail
-        const thumbnail = req.files.thumbnailImage;
+        const thumbnail = req.files ? req.files.thumbnailImage : null;
+    if (!thumbnail) {
+      return res.status(400).json({
+        success: false,
+        message: "Thumbnail image is required",
+      });
+    }
         const tag = JSON.parse(_tag)
         const instructions = JSON.parse(_instructions)
 
-        console.log("tag", tag)
-        console.log("instructions", instructions)
+        console.log("tag : ", tag)
+        console.log("instructions: ", instructions)
+        console.log("courseDescription: ", courseDescription)
+        console.log("courseName : ", courseName)
+        console.log("price :", price)
+        console.log("category : ", category)
+        console.log("whatYouWillLearn : ", whatYouWillLearn)
 
         // validation
         if(!courseName || !courseDescription || !whatYouWillLearn || !price || !tag.length || !thumbnail || !category ||
@@ -44,7 +55,7 @@ exports.createCourse = async (req,res) => {
         const instructorDetails = await User.findById(userId , {
             accountType: "Instructor",
         });
-        console.log("Instructor Detail: ", instructorDetail);
+        // console.log("Instructor Detail: ", instructorDetail);
         if(!instructorDetails){
             return res.status(404).json({
                 success: false,
@@ -63,7 +74,7 @@ exports.createCourse = async (req,res) => {
 
         // upload image to cloudinary 
         const thumbnailImage = await uploadImageToCloudinary(thumbnail, process.env.FOLDER_NAME)
-        console.log(thumbnailImage)
+        console.log("Cloudinary Response:", thumbnailImage);
         // craete a entry for new course
         const newCourse = await Course.create({
             courseName,
@@ -77,7 +88,7 @@ exports.createCourse = async (req,res) => {
             status: status,
             instructions,
         })
-        // add the new course to the user schema of instructor 
+        // add the new course to the user schema of instructor
         await User.findByIdAndUpdate(
             {_id: instructorDetails._id},
             {
@@ -111,7 +122,7 @@ exports.createCourse = async (req,res) => {
             error: error.message
         })
     }
-}  
+}
 
 // Edit Course details
 exports.editCourse = async (req, res) => {
