@@ -7,13 +7,13 @@ require("dotenv").config();
 exports.createSubSection = async (req, res) => {
     try {
         // fetch data
-        const {sectionId, description, title, timeDuration} = req.body;
+        const {sectionId, description, title} = req.body;
 
         // extract files and video
-        const video = req.files.videoFile;
+        const video = req.files.video;
 
         // data validation
-        if(!sectionId || !description || !title || !timeDuration){
+        if(!sectionId || !description || !title  || !video){
             return res.status(404).json({
                 success: false,
                 message: "Missing Properties"
@@ -22,30 +22,30 @@ exports.createSubSection = async (req, res) => {
         // upload video to cloudinary
         const uploadDetails = await uploadImageToCloudinary(video, process.env.FOLDER_NAME)
 
-        // create a sub section
-        const SubSectionDetail = await SubSection.create({
+        
+        // Create a new sub-section with the necessary information
+        const SubSectionDetails = await SubSection.create({
             title: title,
+            // timeDuration: `${uploadDetails.duration}`,
             description: description,
-            timeDuration: timeDuration,
-            videoUrl: uploadDetails.secure_url
+            videoUrl: uploadDetails.secure_url,
         })
-
         // update section with sub section object id
-        const updateSection = await Section.findByIdAndUpdate(
+        const updatedSection = await Section.findByIdAndUpdate(
             {_id:sectionId},
             {
                 $push:{
-                    subSection: SubSectionDetail,
+                    subSection: SubSectionDetails._id,
                     
                 }
             },
             {new:true}
-        )
+        ).populate("subSection")
         // return response
         return res.status(200).json({
             success: true,
             message: "Sub section created successfully ",
-            data: updateSection
+            data: updatedSection
         })
 
     } catch (error) {
@@ -117,7 +117,7 @@ exports.updateSubSection = async (req, res) => {
 exports.deleteSubSection = async (req,res) => {
     try {
         const {subSectionId, sectionId} = req.body;
-        await Section.findByIdAndDelete(
+        await Section.findByIdAndUpdate(
             {_id: sectionId},
             {
                 $pull: {
@@ -137,8 +137,8 @@ exports.deleteSubSection = async (req,res) => {
         )
         return res.status(200).json({
             success: true,
-            data: updatedSection,
             message: "Sub Section deleted successfully",
+            data: updatedSection,
         })
         } catch (error) {
         console.log(error)

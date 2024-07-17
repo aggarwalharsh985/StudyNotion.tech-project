@@ -2,6 +2,8 @@ const Course = require("../models/Course");
 const User = require("../models/User");
 const Category = require("../models/Category");
 const {uploadImageToCloudinary} = require("../utils/imageUploader");
+const Section = require("../models/Section")
+const SubSection = require("../models/SubSection")
 
 // create course hadler function
 exports.createCourse = async (req,res) => {
@@ -161,11 +163,11 @@ exports.editCourse = async (req, res) => {
             .populate({
                 path:"instructor",
                 populate:{
-                    path:"addtionalDetails"
+                    path:"additionalDetails"
                 }
             })
             .populate("category")
-            .populate("ratingAndReviews")
+            // .populate("ratingAndReviews")
             .populate({
                 path:"courseContent",
                 populate: {
@@ -278,7 +280,7 @@ exports.getFullCourseDetails = async (req, res) => {
             .populate({
                 path:"instructor",
                 populate:{
-                    path:"addtionalDetails"
+                    path:"additionalDetails"
                 }
             })
             .populate("category")
@@ -290,11 +292,11 @@ exports.getFullCourseDetails = async (req, res) => {
                 }
             })
             .exec()
-        let courseProgressCount = await CourseProgress.findOne({
-            courseID: courseId,
-            userId: userId
-        })
-        console.log("courseProgresCount", courseProgressCount)
+        // let courseProgressCount = await CourseProgress.findOne({
+        //     courseID: courseId,
+        //     userId: userId
+        // })
+        // console.log("courseProgresCount", courseProgressCount)
 
         if(!courseDetails){
             return res.status(400).json({
@@ -306,10 +308,10 @@ exports.getFullCourseDetails = async (req, res) => {
             success: true,
             data: {
                 courseDetails,
-                totalDuration,
-                completedVideos: courseProgressCount?.completedVideos
-                    ? courseProgressCount?.completedVideos
-                    : [],
+                // totalDuration,
+                // completedVideos: courseProgressCount?.completedVideos
+                //     ? courseProgressCount?.completedVideos
+                //     : [],
             },
         })
     } catch (error) {
@@ -350,6 +352,23 @@ exports.deleteCourse = async (req,res) => {
             return res.status(400).json({message: "Course not found"})
         }
 
+        // Delete sections and sub-sections
+        const courseSections = course.courseContent
+        for (const sectionId of courseSections) {
+            // Delete sub-sections of the section
+            const section = await Section.findById(sectionId)
+            if (section) {
+                const subSections = section.subSection
+                for (const subSectionId of subSections) {
+                await SubSection.findByIdAndDelete(subSectionId)
+                }
+            }
+            // delete the section
+            await Section.findByIdAndDelete(sectionId)
+        }
+        
+        // delete the course
+        await Course.findByIdAndDelete(courseId)
         return res.status(200).json({
             success: true,
             message: "Course deleted successfully"

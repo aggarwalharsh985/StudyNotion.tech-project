@@ -130,6 +130,7 @@ export const createSection = async (data, token) => {
     let result = null
     const toastId = toast.loading("Loading...")
     try {
+        // console.log(token)
         const response = await apiconnector("POST", CREATE_SECTION_API, data, {
             Authorization: `Bearer ${token}`,
         })
