@@ -23,12 +23,13 @@ const ContactUsForm = () => {
                 contactusEndpoint.CONTACT_US_API,
                 data
             )
-            console.log("Email Res - ", res)
+            console.log("Email Res - ", res.data)
             setLoading(false)
         } catch (error) {
             console.log("error message is ", error)
             setLoading(false)
         }
+        console.log("Form Data after API call - ", data);
     }
 
     useEffect(() => {

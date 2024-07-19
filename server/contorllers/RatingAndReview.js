@@ -14,7 +14,7 @@ exports.createRating = async (req, res) => {
         const courseDetails = await Course.findOne(
                                     {
                                         _id: courseId,
-                                        studentEnrolled: {$elemMatch: {$eq: userId}},
+                                        studentsEnroled: {$elemMatch: {$eq: userId}},
                                     }
         );
         if(!courseDetails){
@@ -37,7 +37,7 @@ exports.createRating = async (req, res) => {
         }
 
         // create rating and review
-        const ratingAndReview = await RatingAndReview.create(
+        const ratingReview = await RatingAndReview.create(
                                         {
                                             rating,review,
                                             course: courseId,
@@ -113,9 +113,9 @@ exports.getAverageRating = async (req, res) => {
 }
 
 // get all rating and review 
-exports.getAllRating = async (req, res) => {
+exports.getAllRatingReview = async (req, res) => {
     try {
-        const allReview = await RatingAndReview.find({})
+        const allReviews = await RatingAndReview.find({})
                                 .sort({rating: "desc"})
                                 .populate({
                                     path: "user",
@@ -135,7 +135,8 @@ exports.getAllRating = async (req, res) => {
         console.log(error);
         return res.status(500).json({
             success: false,
-            message: error.message
+            message: "Failed to retrieve the rating and review for the course",
+            error: error.message
         })
     }
 }

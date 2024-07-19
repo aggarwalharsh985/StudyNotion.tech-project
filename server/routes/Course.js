@@ -38,18 +38,18 @@ const {
     deleteSubSection
 } = require("../contorllers/Subsection");
 
-// const {
-//     updateCourseProgress,
-//     getProgressPercentage,
-//   } = require("../controllers/courseProgress")
+const {
+    updateCourseProgress,
+    // getProgressPercentage,
+  } = require("../contorllers/courseProgress")
 // const { createRating } = require("../contorllers/RatingAndReview");
 
 // rating controllers import
-// const {
-//     createRating,
-//     getAverageRating,
-//     getAllRatingReview
-// } = require("../contorllers/RatingAndReview")
+const {
+    createRating,
+    getAverageRating,
+    getAllRatingReview
+} = require("../contorllers/RatingAndReview")
 
 // Importing Middlewares
 const { auth, isInstructor, isStudent, isAdmin } = require("../middlewares/auth")
@@ -92,7 +92,7 @@ router.get("/getAllCourses", getAllCourses)
 router.post("/getCourseDetails", getCourseDetails)
 router.post("/getFullCourseDetails", auth, getFullCourseDetails)
 // To Update Course Progress
-// router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress)
+router.post("/updateCourseProgress", auth, isStudent, updateCourseProgress)
 
 // delete a course
 router.delete("/deleteCourse", deleteCourse)
@@ -109,8 +109,8 @@ router.post("/getCategoryPageDetails", categoryPageDetails)
 //                                      Rating and Review
 // ********************************************************************************************************
 
-// router.post("/createRating", auth, isStudent, createRating)
-// router.get("/getAverageRating", getAverageRating)
-// router.get("/getReviews", getAllRating)
+router.post("/createRating", auth, isStudent, createRating)
+router.get("/getAverageRating", getAverageRating)
+router.get("/getReviews", getAllRatingReview)
 
 module.exports = router

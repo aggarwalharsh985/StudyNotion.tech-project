@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import RenderCartCourses from "./RenderCartCourses"
+import RenderTotalAmount from "./RenderTotalAmount";
 
 export default function Cart (){
     const {total, totalItems} = useSelector((state) => state.cart)
@@ -13,6 +14,7 @@ export default function Cart (){
             {total > 0 ? (
                 <div className="mt-8 flex flex-col-reverse items-start gap-x-10 gap-y-6 lg:flex-row">
                     <RenderCartCourses />
+                    <RenderTotalAmount/>
                 </div>
             ) : (
                 <p className="mt-14 text-center text-3xl text-richblack-100">
