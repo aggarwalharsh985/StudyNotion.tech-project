@@ -97,7 +97,7 @@ function CourseDetails(){
             return 
         }
         setConfirmationModal({
-            text1: "You are not logge in !",
+            text1: "You are not loged in !",
             text2: "Please login to purchase course",
             btn1Text: "Login",
             btn2Text: "Cancel",
