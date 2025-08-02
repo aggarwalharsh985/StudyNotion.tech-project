@@ -22,30 +22,30 @@ database.connect()
 // middleware
 app.use(express.json());
 app.use(cookieParser());
-// const allowedOrigins = [
-//   "http://localhost:3000",
-//   "study-notion-frontend-beige-psi.vercel.app",
-//   "https://study-notion-frontend-harsh-aggarwals-projects-f7d3b2cd.vercel.app/",
-// ]
+const allowedOrigins = [
+  "http://localhost:3000",
+  "study-notion-frontend-beige-psi.vercel.app",
+  "https://study-notion-frontend-harsh-aggarwals-projects-f7d3b2cd.vercel.app/",
+]
 
-app.use(
-    cors({
-        origin: "https://studynotion-tech-project.onrender.com",    
-        credentials: true
-    })
-)
 // app.use(
-//   cors({
-//     origin: function (origin, callback) {
-//       if (!origin || allowedOrigins.includes(origin)) {
-//         callback(null, true)
-//       } else {
-//         callback(new Error("Not allowed by CORS"))
-//       }
-//     },
-//     credentials: true,
-//   })
+//     cors({
+//         origin: "https://studynotion-tech-project.onrender.com",    
+//         credentials: true
+//     })
 // )
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true)
+      } else {
+        callback(new Error("Not allowed by CORS"))
+      }
+    },
+    credentials: true,
+  })
+)
 app.use(
     fileUpload({
         useTempFiles: true,
@@ -63,10 +63,10 @@ app.use("/api/v1/course", userCourse);
 app.use("/api/v1/payment", userPayment);
 app.use("/api/v1/reach", contactUsRoute);
 
-app.use(express.static(path.join(__dirname, "../build")));
+app.use(express.static(path.join(__dirname, "../src/build")));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../build/index.html"));
+  res.sendFile(path.join(__dirname, "../src/build/index.html"));
 });
 
 
