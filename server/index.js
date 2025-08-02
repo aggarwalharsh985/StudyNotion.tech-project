@@ -23,7 +23,7 @@ database.connect()
 app.use(express.json());
 app.use(cookieParser());
 const allowedOrigins = [
-  "http://localhost:3000",
+  "http://localhost:4000",
   "study-notion-frontend-beige-psi.vercel.app",
   "https://study-notion-frontend-harsh-aggarwals-projects-f7d3b2cd.vercel.app/",
 ]
