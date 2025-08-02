@@ -30,7 +30,7 @@ exports.resetPasswordToken = async (req, res) => {
         console.log("DETAILS", updateDetails)
 
         // create URL
-        const url = `https://studynotion-tech-project.onrender.com/update-password/${token}`
+        const url = `https://study-notion-frontend-beige-psi.vercel.app/update-password/${token}`
 
         // send mail containing the url
         await mailSender(user.email, 
